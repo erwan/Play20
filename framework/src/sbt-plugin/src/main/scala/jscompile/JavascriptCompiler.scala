@@ -13,9 +13,6 @@ object JavascriptCompiler {
 
   import com.google.javascript.jscomp.{ Compiler, CompilerOptions, JSSourceFile }
 
-  lazy val compiler = new Compiler()
-  lazy val extern = JSSourceFile.fromCode("externs.js", "function alert(x) {}")
-
   /**
    * Compile a JS file with its dependencies
    * @return a triple containing the unminifed source code, the minified source code, the list of dependencies (including the input file)
@@ -35,6 +32,8 @@ object JavascriptCompiler {
     options.setCommonJSModulePathPrefix(source.getParent() + "/")
     options.setManageClosureDependencies(Seq(toModuleName(source.getName())).asJava)
 
+    val compiler = new Compiler()
+    val extern = JSSourceFile.fromCode("externs.js", "function alert(x) {}")
     val all = allSiblings(source)
     val input = (baseJs +: all.map(f => JSSourceFile.fromFile(f))).toArray
 
@@ -60,6 +59,8 @@ object JavascriptCompiler {
    */
   def minify(source: String, name: Option[String]): String = {
 
+    val compiler = new Compiler()
+    val extern = JSSourceFile.fromCode("externs.js", "function alert(x) {}")
     val options = new CompilerOptions()
 
     val input = JSSourceFile.fromCode(name.getOrElse("unknown"), source)
