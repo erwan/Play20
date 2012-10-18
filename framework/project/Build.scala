@@ -25,6 +25,7 @@ object PlayBuild extends Build {
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
             resolvers += typesafe,
+            resolvers += localMaven,
             crossPaths := false
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -39,6 +40,7 @@ object PlayBuild extends Build {
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
             scalacOptions ++= Seq("-encoding", "UTF-8", "-Xlint","-deprecation", "-unchecked"),
+            resolvers += localMaven,
             resolvers += typesafe
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -55,6 +57,7 @@ object PlayBuild extends Build {
             publishArtifact in packageDoc := false,
             publishArtifact in (Compile, packageSrc) := false,
             scalacOptions ++= Seq("-encoding", "UTF-8", "-Xlint","-deprecation", "-unchecked"),
+            resolvers += localMaven,
             resolvers += typesafe
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -72,6 +75,7 @@ object PlayBuild extends Build {
             publishArtifact in (Compile, packageSrc) := false,
             unmanagedJars in Compile <+= (baseDirectory) map { b => compilerJar(b / "../..") },
             scalacOptions ++= Seq("-encoding", "UTF-8", "-Xlint","-deprecation", "-unchecked"),
+            resolvers += localMaven,
             resolvers += typesafe
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -82,6 +86,7 @@ object PlayBuild extends Build {
         settings = buildSettingsWithMIMA ++ Seq(
             previousArtifact := Some("play" % {"anorm_"+previousScalaVersion} % previousVersion),
             publishTo := Some(playRepository),
+            resolvers += localMaven,
             scalacOptions ++= Seq("-encoding", "UTF-8", "-Xlint","-deprecation", "-unchecked"),
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true
@@ -130,6 +135,7 @@ object PlayBuild extends Build {
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
             resolvers += typesafe,
+            resolvers += localMaven,
             sourceGenerators in Compile <+= (dependencyClasspath in TemplatesCompilerProject in Runtime, packageBin in TemplatesCompilerProject in Compile, scalaSource in Compile, sourceManaged in Compile, streams) map ScalaTemplates
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -147,6 +153,7 @@ object PlayBuild extends Build {
             javacOptions in doc := Seq("-source", "1.6"),
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
+            resolvers += localMaven,
             resolvers += typesafe
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -163,6 +170,7 @@ object PlayBuild extends Build {
             javacOptions in doc := Seq("-source", "1.6"),
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
+            resolvers += localMaven,
             resolvers += typesafe
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -180,6 +188,7 @@ object PlayBuild extends Build {
             javacOptions in doc := Seq("-source", "1.6"),
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
+            resolvers += localMaven,
             resolvers += typesafe,
             compile in (Compile) <<= (dependencyClasspath in Compile, compile in Compile, classDirectory in Compile) map { (deps,analysis,classes) =>
 
@@ -213,6 +222,7 @@ object PlayBuild extends Build {
             javacOptions in doc := Seq("-source", "1.6"),
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
+            resolvers += localMaven,
             resolvers += typesafe
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -230,6 +240,7 @@ object PlayBuild extends Build {
             javacOptions in doc := Seq("-source", "1.6"),
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
+            resolvers += localMaven,
             resolvers += typesafe
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -247,6 +258,7 @@ object PlayBuild extends Build {
             javacOptions in doc := Seq("-source", "1.6"),
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
+            resolvers += localMaven,
             resolvers += typesafe,
             parallelExecution in Test := false
         )
@@ -268,6 +280,7 @@ object PlayBuild extends Build {
             scalacOptions ++= Seq("-encoding", "UTF-8", "-Xlint","-deprecation", "-unchecked"),
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
+            resolvers += localMaven,
             resolvers += typesafe
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -287,6 +300,7 @@ object PlayBuild extends Build {
             scalacOptions ++= Seq("-encoding", "UTF-8", "-Xlint","-deprecation", "-unchecked"),
             publishArtifact in packageDoc := buildWithDoc,
             publishArtifact in (Compile, packageSrc) := true,
+            resolvers += localMaven,
             resolvers += typesafe
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -296,6 +310,7 @@ object PlayBuild extends Build {
         file("."),
         settings = buildSettings ++ Seq(
             libraryDependencies := runtime,
+            resolvers += localMaven,
             cleanFiles ++= Seq(file("../dist"), file("../repository/local")),
             resetRepositoryTask,
             buildRepositoryTask,
@@ -369,6 +384,7 @@ object PlayBuild extends Build {
         import BuildSettings._
 
         val playLocalRepository = Resolver.file("Play Local Repository", file("../repository/local"))(Resolver.ivyStylePatterns)
+        val localMaven = "Local Maven Repository" at "file:///Users/elo/.m2/repository"
 
         val typesafe = "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
 
@@ -466,9 +482,7 @@ object PlayBuild extends Build {
             "org.apache.commons"                %    "commons-lang3"            %   "3.1",
             "org.apache.ws.commons"             %    "ws-commons-util"          %   "1.0.1" exclude("junit", "junit"),
 
-            ("com.ning"                         %    "async-http-client"        %   "1.7.6" notTransitive())
-              .exclude("org.jboss.netty", "netty")
-            ,
+            "com.ning"                          %    "async-http-client-netty-provider" % "1.8.0-SNAPSHOT" exclude("org.jboss.netty", "netty"),
 
             "oauth.signpost"                    %    "signpost-core"            %   "1.2.1.2",
             "oauth.signpost"                    %    "signpost-commonshttp4"    %   "1.2.1.2",
