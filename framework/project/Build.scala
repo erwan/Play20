@@ -135,6 +135,7 @@ object PlayBuild extends Build {
             publishArtifact in (Compile, packageSrc) := true,
             resolvers += typesafe,
             resolvers += caffeine,
+            parallelExecution in Test := false,
             sourceGenerators in Compile <+= (dependencyClasspath in TemplatesCompilerProject in Runtime, packageBin in TemplatesCompilerProject in Compile, scalaSource in Compile, sourceManaged in Compile, streams) map ScalaTemplates
         )
     ).settings(com.typesafe.sbtscalariform.ScalariformPlugin.defaultScalariformSettings: _*)
@@ -347,7 +348,7 @@ object PlayBuild extends Build {
         val buildWithDoc      = Option(System.getProperty("generate.doc")).isDefined
         val previousVersion   = "2.0.3"
         val previousScalaVersion = "2.9.1"
-        val buildScalaVersion = "2.10.0-M7"
+        val buildScalaVersion = "2.10.0-RC1"
         val buildScalaVersionForSbt = "2.9.2"
         val buildSbtVersion   = "0.12.1"
         val buildSbtVersionBinaryCompatible = "0.12"
@@ -454,7 +455,7 @@ object PlayBuild extends Build {
             "javax.servlet"                     %    "javax.servlet-api"        %   "3.0.1",
             "javax.transaction"                 %    "jta"                      %   "1.1",
 
-            "org.specs2"                        %   "specs2_2.10.0-M7"          %   "1.12.1.1" %  "test"
+            "org.specs2"                        %   "specs2_2.10.0-RC1"         %   "1.12.2" %  "test"
         )
      
         val runtime = Seq(
@@ -467,19 +468,17 @@ object PlayBuild extends Build {
             "ch.qos.logback"                    %    "logback-core"             %   "1.0.7",
             "ch.qos.logback"                    %    "logback-classic"          %   "1.0.7",
             
-            "com.github.scala-incubator.io"     %%   "scala-io-file"            %   "0.4.1" exclude("javax.transaction", "jta"),
+            "com.github.scala-incubator.io"     %   "scala-io-file_2.10.0-RC1"  %   "0.4.1" exclude("javax.transaction", "jta"),
             
-            "com.typesafe.akka"                 %    "akka-actor_2.10.0-M7"     %   "2.1-M2",
-            "com.typesafe.akka"                 %    "akka-slf4j_2.10.0-M7"     %   "2.1-M2",
+            "com.typesafe.akka"                 %    "akka-actor_2.10.0-RC1"    %   "2.1.0-RC1",
+            "com.typesafe.akka"                 %    "akka-slf4j_2.10.0-RC1"    %   "2.1.0-RC1",
 
-
-            "org.scala-tools"                   %    "scala-stm_2.10.0-M7"      %   "0.6",
+            "org.scala-stm"                     %    "scala-stm_2.10.0-RC1"     %   "0.6",
 
             "joda-time"                         %    "joda-time"                %   "2.1",
             "org.joda"                          %    "joda-convert"             %   "1.2",
             
             "org.apache.commons"                %    "commons-lang3"            %   "3.1",
-            "org.apache.ws.commons"             %    "ws-commons-util"          %   "1.0.1" exclude("junit", "junit"),
 
             "com.ning"                         %    "async-http-client-netty-provider" % "1.8.0-SNAPSHOT" exclude("org.jboss.netty", "netty"),
 
@@ -493,7 +492,7 @@ object PlayBuild extends Build {
 
             "javax.transaction"                 %    "jta"                      %   "1.1",
 
-            "org.specs2"                        %   "specs2_2.10.0-M7"          %   "1.12.1.1" %  "test",
+            "org.specs2"                        %   "specs2_2.10.0-RC1"         %   "1.12.2" %  "test",
 
             "org.mockito"                       %    "mockito-all"              %   "1.9.0"    %  "test",
             "com.novocode"                      %    "junit-interface"          %   "0.8"      %  "test",
@@ -512,13 +511,13 @@ object PlayBuild extends Build {
 
         val templatesCompilerDependencies = Seq(
             "com.github.scala-incubator.io"     %%   "scala-io-file"            %   "0.4.1" exclude("javax.transaction", "jta"),
-            "org.specs2"                        %%   "specs2"                   %   "1.12.1"    %   "test"
+            "org.specs2"                        %%   "specs2"                   %   "1.12.2"    %   "test"
               exclude("javax.transaction", "jta")
         )
         
         
         val sbtDependencies = Seq(
-            "com.typesafe"                      %    "config"                   %   "0.5.0",
+            "com.typesafe"                      %    "config"                   %   "1.0.0",
             "rhino"                             %    "js"                       %   "1.7R2",
 
             ("com.google.javascript"            %    "closure-compiler"         %   "rr2079.1" notTransitive())
@@ -548,23 +547,23 @@ object PlayBuild extends Build {
         )
 
         val consoleDependencies = Seq(
-            "net.databinder.giter8"             %   "giter8_2.9.1"             %   "0.5.0" 
+            "net.databinder.giter8"             %   "giter8_2.9.1"              %   "0.5.0" 
         )
 
         val templatesDependencies = Seq(
-            "com.github.scala-incubator.io"     %%   "scala-io-file"            %   "0.4.1" exclude("javax.transaction", "jta"),
-            "org.specs2"                        %    "specs2_2.10.0-M7"         %   "1.12.1.1"    %   "test"
+            "com.github.scala-incubator.io"     %    "scala-io-file_2.10.0-RC1" %   "0.4.1" exclude("javax.transaction", "jta"),
+            "org.specs2"                        %    "specs2_2.10.0-RC1"        %   "1.12.2"    %   "test"
         )
 
         val iterateesDependencies = Seq(
-            "org.scala-tools"               %    "scala-stm_2.10.0-M7"      %   "0.6",
-            "com.github.scala-incubator.io"     %%   "scala-io-file"            %   "0.4.1" exclude("javax.transaction", "jta")
+            "org.scala-stm"                     %    "scala-stm_2.10.0-RC1"     %   "0.6",
+            "com.github.scala-incubator.io"     %    "scala-io-file_2.10.0-RC1" %   "0.4.1" exclude("javax.transaction", "jta")
         )
           
 
         val testDependencies = Seq(
             "junit"                             %    "junit-dep"                %   "4.10",
-            "org.specs2"                        %    "specs2_2.10.0-M7"         %   "1.12.1.1",
+            "org.specs2"                        %    "specs2_2.10.0-RC1"        %   "1.12.2",
             "com.novocode"                      %    "junit-interface"          %   "0.8" exclude ("junit", "junit"),
 
             "org.fluentlenium"                  %    "fluentlenium-festassert"  %   "0.7.3"
